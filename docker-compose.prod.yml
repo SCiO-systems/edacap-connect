@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+    nginx:        
+        image: sciohub/edacap-connect:prod-nginx
+        container_name: laravel-nginx
+        restart: unless-stopped
+        volumes:
+          - /etc/letsencrypt/live/dev.edacap.api.scio.services/fullchain.pem:/etc/letsencrypt/live/dev.edacap.api.scio.services/fullchain.pem
+          - /etc/letsencrypt/live/dev.edacap.api.scio.services/privkey.pem:/etc/letsencrypt/live/dev.edacap.api.scio.services/privkey.pem
+        ports:
+          - 50100:443
+          - 50101:80
+        networks:
+          - default  
+
+    php:
+        image: sciohub/edacap-connect:dev
+        container_name: laravel-app
+        restart: unless-stopped
+        networks:
+          - default
+
+networks:
+  default:
+    name: app
